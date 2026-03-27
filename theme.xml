@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html>
+<html b:version='2' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+  <head>
+    <meta charset='UTF-8'/>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+
+    <!-- Canonical URL (declared once) -->
+    <b:if cond='data:blog.pageType == &quot;item&quot;'>
+      <link expr:href='data:blog.canonicalUrl ?: data:blog.url' rel='canonical'/>
+      <b:else/>
+      <link expr:href='data:blog.canonicalHomepageUrl ?: data:blog.homepageUrl' rel='canonical'/>
+    </b:if>
+
+    <!-- Open Graph -->
+    <meta expr:content='data:blog.pageType == &quot;item&quot; ? &quot;article&quot; : &quot;website&quot;' property='og:type'/>
+    <meta expr:content='data:blog.pageName ?: data:blog.title' property='og:title'/>
+    <meta expr:content='data:blog.metaDescription ?: data:blog.description' property='og:description'/>
+    <meta expr:content='data:blog.canonicalUrl ?: data:blog.url' property='og:url'/>
+    <meta expr:content='data:view.featuredImage ? data:view.featuredImage : data:blog.postImageUrl ?: data:blog.logoUrl' property='og:image'/>
+
+    <!-- Twitter Card -->
+    <meta expr:content='(data:view.featuredImage or data:blog.postImageUrl) ? &quot;summary_large_image&quot; : &quot;summary&quot;' name='twitter:card'/>
+    <meta expr:content='data:blog.pageName ?: data:blog.title' name='twitter:title'/>
+    <meta expr:content='data:blog.metaDescription ?: data:blog.description' name='twitter:description'/>
+    <meta expr:content='data:view.featuredImage ? data:view.featuredImage : data:blog.postImageUrl ?: data:blog.logoUrl' name='twitter:image'/>
+
+    <!-- BlogPosting JSON-LD for item pages -->
+    <b:if cond='data:blog.pageType == &quot;item&quot;'>
+      <script type='application/ld+json'>
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;BlogPosting&quot;,
+        &quot;headline&quot;: &quot;<data:blog.pageName/>&quot;,
+        &quot;description&quot;: &quot;<data:blog.metaDescription/>&quot;,
+        &quot;image&quot;: &quot;<data:view.featuredImage/>&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Person&quot;,
+          &quot;name&quot;: &quot;<data:post.author.name/>&quot;
+        },
+        &quot;publisher&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;<data:blog.title/>&quot;,
+          &quot;logo&quot;: {
+            &quot;@type&quot;: &quot;ImageObject&quot;,
+            &quot;url&quot;: &quot;<data:blog.logoUrl/>&quot;
+          }
+        },
+        &quot;datePublished&quot;: &quot;<data:post.timestampISO8601/>&quot;,
+        &quot;dateModified&quot;: &quot;<data:post.lastUpdatedISO8601 ?: data:post.timestampISO8601/>&quot;,
+        &quot;mainEntityOfPage&quot;: {
+          &quot;@type&quot;: &quot;WebPage&quot;,
+          &quot;@id&quot;: &quot;<data:blog.canonicalUrl/>&quot;
+        }
+      }
+      </script>
+
+      <!-- Breadcrumb JSON-LD matches rendered breadcrumb links -->
+      <script type='application/ld+json'>
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;BreadcrumbList&quot;,
+        &quot;itemListElement&quot;: [
+          {
+            &quot;@type&quot;: &quot;ListItem&quot;,
+            &quot;position&quot;: 1,
+            &quot;name&quot;: &quot;Home&quot;,
+            &quot;item&quot;: &quot;<data:blog.homepageUrl/>&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;ListItem&quot;,
+            &quot;position&quot;: 2,
+            &quot;name&quot;: &quot;<data:blog.pageName/>&quot;,
+            &quot;item&quot;: &quot;<data:blog.canonicalUrl/>&quot;
+          }
+        ]
+      }
+      </script>
+    </b:if>
+  </head>
+  <body>
+    <header>
+      <b:if cond='data:blog.pageType == &quot;item&quot;'>
+        <div class='site-title'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></div>
+        <b:else/>
+        <h1 class='site-title'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></h1>
+      </b:if>
+    </header>
+
+    <b:if cond='data:blog.pageType == &quot;item&quot;'>
+      <nav aria-label='Breadcrumb'>
+        <ol class='breadcrumbs'>
+          <li><a expr:href='data:blog.homepageUrl'>Home</a></li>
+          <li aria-current='page'><data:blog.pageName/></li>
+        </ol>
+      </nav>
+    </b:if>
+
+    <main>
+      <b:loop values='data:posts' var='post'>
+        <article>
+          <b:if cond='data:blog.pageType == &quot;item&quot;'>
+            <h1 class='post-title'><data:post.title/></h1>
+            <b:else/>
+            <h2 class='post-title'><a expr:href='data:post.url'><data:post.title/></a></h2>
+          </b:if>
+
+          <b:if cond='data:post.firstImageUrl'>
+            <img class='post-thumb' expr:alt='data:post.title ?: data:post.snippet ?: &quot;Post thumbnail image&quot;' expr:src='data:post.firstImageUrl'/>
+          </b:if>
+
+          <section class='post-content'>
+            <h2>Overview</h2>
+            <div class='entry-body' expr:data-post-title='data:post.title'>
+              <data:post.body/>
+            </div>
+            <h3>Details</h3>
+          </section>
+        </article>
+      </b:loop>
+    </main>
+
+    <script>
+      (function () {
+        var images = document.querySelectorAll('.entry-body img, .post-thumb');
+        images.forEach(function (img) {
+          if (!img.getAttribute('alt') || !img.getAttribute('alt').trim()) {
+            var article = img.closest('article');
+            var titleEl = article ? article.querySelector('.post-title') : null;
+            var title = titleEl ? titleEl.textContent.trim() : '';
+            var src = img.getAttribute('src') || '';
+            var filename = src.split('/').pop().split('?')[0].replace(/[-_]+/g, ' ').replace(/\.[a-zA-Z0-9]+$/, '');
+            img.setAttribute('alt', title || filename || 'Post image');
+          }
+        });
+      }());
+    </script>
+  </body>
+</html>
