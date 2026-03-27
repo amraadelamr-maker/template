@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:version='2' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+  <head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <title><data:blog.pageTitle/></title>
+
+    <!-- Connection and preload hints -->
+    <link href='https://fonts.googleapis.com' rel='preconnect'/>
+    <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
+    <link as='style' href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap' rel='preload'/>
+    <link as='font' crossorigin='anonymous' href='https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTcviYwY.woff2' rel='preload' type='font/woff2'/>
+    <link as='image' href='https://cdn.example.com/assets/hero.webp' rel='preload'/>
+    <link as='style' href='https://cdn.example.com/assets/critical.css' rel='preload'/>
+
+    <!-- Async font stylesheet pattern -->
+    <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap' media='print' onload="this.media='all'" rel='stylesheet'/>
+    <noscript>
+      <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap' rel='stylesheet'/>
+    </noscript>
+
+    <!-- Critical CSS only -->
+    <b:skin><![CDATA[
+      :root { --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; --content-max: 72rem; --brand: #111827; }
+      html, body { margin: 0; padding: 0; font-family: var(--font-body); color: var(--brand); background: #fff; }
+      .site-header { min-height: 72px; display: flex; align-items: center; justify-content: space-between; max-width: var(--content-max); margin: 0 auto; padding: 0 1rem; }
+      .hero { max-width: var(--content-max); margin: 0 auto; padding: 1.5rem 1rem 0; }
+      .hero__media { aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; }
+      .hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .post-list { max-width: var(--content-max); margin: 1.5rem auto; padding: 0 1rem; }
+      .post-card { display: grid; grid-template-columns: 128px 1fr; gap: 1rem; align-items: start; margin-bottom: 1rem; }
+      .post-card__thumb { width: 128px; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 8px; background: #f3f4f6; }
+      .post-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .icon { width: 1rem; height: 1rem; display: inline-block; vertical-align: -0.15rem; }
+    ]]></b:skin>
+
+    <!-- Non-critical CSS loaded asynchronously -->
+    <link href='https://cdn.example.com/assets/features.css' media='print' onload="this.media='all'" rel='stylesheet'/>
+    <noscript>
+      <link href='https://cdn.example.com/assets/features.css' rel='stylesheet'/>
+    </noscript>
+
+    <!-- Inline SVG sprite for only used icons -->
+    <svg aria-hidden='true' style='position:absolute;width:0;height:0;overflow:hidden' xmlns='http://www.w3.org/2000/svg'>
+      <symbol id='icon-search' viewBox='0 0 24 24'><path d='M10 4a6 6 0 1 0 3.89 10.57l4.77 4.77 1.41-1.41-4.77-4.77A6 6 0 0 0 10 4zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8z'/></symbol>
+      <symbol id='icon-share' viewBox='0 0 24 24'><path d='M18 16a3 3 0 0 0-2.39 1.2l-6.78-3.39a3.05 3.05 0 0 0 0-1.62l6.78-3.39A3 3 0 1 0 15 7a3.1 3.1 0 0 0 .05.55L8.27 10.94a3 3 0 1 0 0 2.12l6.78 3.39A3 3 0 1 0 18 16z'/></symbol>
+    </svg>
+  </head>
+  <body>
+    <header class='site-header'>
+      <h1><data:blog.title/></h1>
+      <button aria-label='Search' type='button'>
+        <svg class='icon'><use href='#icon-search'/></svg>
+      </button>
+    </header>
+
+    <section class='hero'>
+      <div class='hero__media'>
+        <img alt='Featured story image' fetchpriority='high' height='900' src='https://cdn.example.com/assets/hero.webp' width='1600'/>
+      </div>
+    </section>
+
+    <main class='post-list'>
+      <b:loop values='data:posts' var='post'>
+        <article class='post-card'>
+          <a class='post-card__thumb' expr:href='data:post.url'>
+            <img alt='Post thumbnail' decoding='async' height='96' loading='lazy' src='https://cdn.example.com/assets/thumb-placeholder.webp' width='128'/>
+          </a>
+          <div>
+            <h2><a expr:href='data:post.url'><data:post.title/></a></h2>
+            <p><data:post.snippet/></p>
+            <button aria-label='Share' type='button'>
+              <svg class='icon'><use href='#icon-share'/></svg>
+            </button>
+          </div>
+        </article>
+      </b:loop>
+      <b:include data='blog' name='all-head-content'/>
+      <b:include data='blog' name='quickedit'/>
+    </main>
+
+    <!-- Deferred non-essential scripts -->
+    <script defer='defer' src='https://cdn.example.com/assets/search-enhancements.min.js'></script>
+    <script defer='defer' src='https://cdn.example.com/assets/share-enhancements.min.js'></script>
+
+    <!-- Minified delayed analytics init -->
+    <script>
+      (()=>{const i=()=>{const s=document.createElement('script');s.src='https://cdn.example.com/assets/analytics.min.js';s.defer=true;document.head.appendChild(s)};document.addEventListener('DOMContentLoaded',()=>{if('requestIdleCallback'in window){requestIdleCallback(i,{timeout:2000})}else{setTimeout(i,1200)}},{once:true});})();
+    </script>
+  </body>
+</html>
